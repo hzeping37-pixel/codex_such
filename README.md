@@ -1,94 +1,125 @@
-# Codex - AI代码助手
+# Codex - AI 编程助手
 
-一个功能完整的AI代码生成与项目构建系统。
+真正的 Coding Agent：能操作文件系统、执行命令、形成闭环。
 
-## 功能特点
+## 核心能力
 
-| 功能 | 说明 |
+| 工具 | 功能 |
 |------|------|
-| 项目生成 | 一键生成完整项目结构 |
-| 代码生成 | 根据需求生成代码 |
-| 代码补全 | 根据上下文补全代码 |
-| 代码解释 | 解释代码功能和逻辑 |
-| 代码重构 | 优化代码质量和可读性 |
-| 代码调试 | 自动分析并修复错误 |
+| `read_file` | 读取文件内容 |
+| `write_file` | 创建/覆盖文件 |
+| `edit_file` | 精确替换文件内容 |
+| `list_dir` | 列出目录内容 |
+| `list_files` | 递归列出所有文件 |
+| `delete_file` | 删除文件 |
+| `shell` | 执行 Shell 命令 |
+| `search_code` | 正则搜索代码库 |
+
+## 闭环流程
+
+```
+用户输入需求
+    ↓
+AI 理解并规划
+    ↓
+执行工具（读文件/改文件/跑命令）
+    ↓
+验证结果
+    ↓
+返回给用户
+```
 
 ## 快速开始
 
-### 双击启动
-```
-启动Codex.bat
+### 1. 安装依赖
+
+```bash
+pip install -r requirements.txt
 ```
 
-### 手动启动
+### 2. 配置 API Key
+
 ```bash
-cd codex
-pip install -r requirements.txt
+# Windows PowerShell
+$env:DEEPSEEK_API_KEY="sk-xxx"
+
+# Linux/Mac
+export DEEPSEEK_API_KEY=sk-xxx
+```
+
+### 3. 运行
+
+**双击启动（推荐）：**
+- `启动Codex.bat` - Web 模式，浏览器访问 http://localhost:8000
+- `启动CLI.bat` - 终端模式
+
+**命令行启动：**
+
+```bash
+# CLI 模式
+python main.py cli
+
+# Web 模式
 python main.py
 ```
 
-浏览器访问: http://localhost:8000
+## 使用示例
+
+### 代码生成并执行
+
+```
+>>> 写一个 hello.py 打印 Hello World 并运行它
+```
+
+AI 会自动：
+1. 创建 `hello.py`
+2. 执行 `python hello.py`
+3. 返回执行结果
+
+### 读取并修改文件
+
+```
+>>> 读取 main.py，把所有 print 改成 logging
+```
+
+AI 会自动：
+1. 读取文件内容
+2. 分析需要修改的地方
+3. 逐个替换
+4. 验证修改结果
+
+### 运行命令
+
+```
+>>> 看看当前目录有什么文件，然后运行 python --version
+```
 
 ## 项目结构
 
 ```
 codex/
-├── main.py              # FastAPI入口
+├── main.py              # 入口（CLI / Web）
+├── cli.py               # CLI 界面
 ├── core/
-│   ├── engine.py        # 代码生成引擎
-│   ├── executor.py      # 代码执行器
-│   ├── filesystem.py    # 文件系统操作
-│   └── agent.py         # 核心代理
-├── prompts/
-│   └── templates.py     # LLM提示词
-├── models/
-│   └── schemas.py       # 数据模型
+│   ├── agent_new.py     # Agent 核心（主循环）
+│   ├── memory.py        # 对话记忆
+│   └── tools/
+│       ├── __init__.py  # Tool 基类
+│       ├── registry.py  # 工具注册中心
+│       ├── file_ops.py  # 文件操作工具
+│       ├── shell.py     # Shell 执行工具
+│       └── search.py    # 代码搜索工具
 ├── static/
-│   └── index.html       # 前端界面
-├── workspace/           # 生成的代码存放
+│   └── index.html       # Web 界面
 └── requirements.txt
 ```
 
-## API接口
+## 与传统代码生成器的区别
 
-| 接口 | 说明 |
-|------|------|
-| POST /api/project | 生成完整项目 |
-| POST /api/generate | 生成代码 |
-| POST /api/complete | 代码补全 |
-| POST /api/explain | 代码解释 |
-| POST /api/refactor | 代码重构 |
-| POST /api/debug | 代码调试 |
-| GET /api/files | 列出文件 |
-| GET /api/files/{path} | 读取文件 |
-
-## 使用示例
-
-### 生成Flask项目
-```
-生成一个Flask REST API项目，包含用户CRUD操作
-```
-
-### 代码解释
-```
-解释以下代码的功能：
-def fibonacci(n):
-    if n <= 1:
-        return n
-    return fibonacci(n-1) + fibonacci(n-2)
-```
-
-### 代码重构
-```
-重构以下代码，提高性能和可读性：
-[粘贴代码]
-```
-
-## 技术栈
-
-- Python 3.10+
-- FastAPI
-- DeepSeek API
-- aiofiles
-"# codex_such" 
-"# codex_such" 
+| | 传统生成器 | Codex |
+|---|-----------|-------|
+| 输出 | 代码片段 | 执行结果 |
+| 文件操作 | 无 | 读/写/改/删 |
+| 命令执行 | 无 | 执行并返回结果 |
+| 上下文 | 单轮 | 多轮对话 |
+| 验证 | 无 | 自动验证 |
